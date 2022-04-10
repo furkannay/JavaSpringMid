@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+        <div class="container-fluid">
+            <img src="https://upload.wikimedia.org/wikipedia/en/0/07/Ala-Too_International_University_Seal.png" style="width:100px;height:100px;">
+            <a class="navbar-brand" href="#">Ala-Too Teachers</a>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"data-toggle="modal" data-target="#addTeachers">Add Teacher</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"> Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api">API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class ="jumbotron">  <h1>Alatoo Teachers Database</h1>
+    <p>This website is made to keep track of teachers in alatoo. You can add a Teacher with the add teacher button which sends a POST request to /teachers/add and adds the teacher to the database.</p></div>
+    <div class ="container my-2"></div>
+    <table class ="table table-stripped table-responsive-md" cellspacing="1"  border="2" bordercolor="#000000" background="bg.gif">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Field</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each = "user: ${teachers}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.field}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="modal fade" id="addTeachers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModelLabel">Add Teacher Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="teachersForm">
+
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="field">Field</label>
+                            <input type="text" class="form-control" id="field" placeholder="Enter Field">
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="sendData()">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sendData() {
+
+            $.ajax({
+                type: "Post",
+                url: "/teachers/add",
+                data: JSON.stringify({"name":$("#name").val(),"email":$("#email").val(),"field":$("#field").val()}),
+                success: function () {
+                    console.log("OK")
+                },
+                dataType: "json",
+                contentType: "application/json"
+            })
+        }
+    </script>
+</body>
+</html>
